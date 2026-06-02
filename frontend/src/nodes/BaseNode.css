@@ -1,0 +1,137 @@
+.base-node {
+  background: var(--bg-node);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-color);
+  border-top: 4px solid var(--node-accent);
+  border-radius: var(--border-radius);
+  padding: 12px;
+  width: 240px;
+  min-height: 80px;
+  box-shadow: var(--shadow-lg);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+  position: relative;
+  font-family: var(--font-family);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.base-node:hover {
+  border-color: var(--node-accent);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 10px rgba(99, 102, 241, 0.1);
+}
+
+.base-node-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 6px;
+  margin-bottom: 2px;
+}
+
+.base-node-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.base-node-icon {
+  font-size: 1.1rem;
+  color: var(--node-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.base-node-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+  color: var(--text-primary);
+}
+
+.base-node-delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.base-node-delete-btn:hover {
+  color: var(--accent-rose);
+  transform: scale(1.2);
+}
+
+.base-node-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.85rem;
+  flex-grow: 1;
+}
+
+/* Base Node Content Form Styling */
+.base-node-body label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.base-node-body input,
+.base-node-body select,
+.base-node-body textarea {
+  background: rgba(9, 13, 22, 0.6);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.82rem;
+  font-family: var(--font-family);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.base-node-body input:focus,
+.base-node-body select:focus,
+.base-node-body textarea:focus {
+  border-color: var(--node-accent);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+/* ReactFlow Custom Handle Styling */
+.base-node-handle {
+  width: 10px !important;
+  height: 10px !important;
+  background-color: var(--node-accent) !important;
+  border: 2px solid var(--bg-secondary) !important;
+  border-radius: 50% !important;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.base-node-handle:hover {
+  transform: scale(1.3);
+  background-color: #fff !important;
+  box-shadow: 0 0 8px var(--node-accent);
+}
+
+.base-node-handle-target {
+  left: -6px !important;
+}
+
+.base-node-handle-source {
+  right: -6px !important;
+}
