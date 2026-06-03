@@ -30,7 +30,10 @@ export const SubmitButton = () => {
       }));
 
       // 2. Perform POST to backend API
-      const response = await fetch('http://localhost:8000/pipelines/parse', {
+      // In Docker/EC2: Nginx proxies /api/* → http://backend:8000/*
+      // Locally (npm start): uses CRA proxy defined in package.json
+      const API_URL = process.env.REACT_APP_API_URL || '/api';
+      const response = await fetch(`${API_URL}/pipelines/parse`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
