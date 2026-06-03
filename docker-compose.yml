@@ -1,13 +1,5 @@
 # ─────────────────────────────────────────────────────────────
 # docker-compose.yml — VectorShift Pipeline Editor
-#
-# Services:
-#   backend  — FastAPI + Uvicorn (port 8000, internal only)
-#   frontend — React build served by Nginx (port 80, public)
-#
-# Usage:
-#   Local:  docker compose up --build
-#   EC2:    docker compose -f docker-compose.yml up -d --build
 # ─────────────────────────────────────────────────────────────
 
 version: "3.9"
@@ -21,27 +13,24 @@ services:
       dockerfile: Dockerfile
     container_name: vectorshift-backend
 
-    # NOT exposed on host — only reachable by frontend container
-    # via the internal Docker network (http://backend:8000)
+    # NOT exposed on host — only reachable inside app-network
     expose:
       - "8000"
 
-    # Restart automatically if the process crashes
     restart: unless-stopped
 
-    # Environment variables (override in .env file on EC2)
     environment:
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
 
-    # Health check — Docker will restart if FastAPI stops responding
+    # Health check using shell so we get better error messages
+    # start_period gives uvicorn time to boot before checks begin
     healthcheck:
-      test: ["CMD", "python", "-c",
-             "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
     networks:
       - app-network
@@ -54,22 +43,19 @@ services:
       dockerfile: Dockerfile
     container_name: vectorshift-frontend
 
-    # Port 80 is mapped to the EC2 host
-    # Traffic flow: Internet → EC2:80 → Nginx → /api/* → backend:8000
     ports:
       - "80:80"
 
     restart: unless-stopped
 
-    # Frontend waits for backend to be healthy before starting
+    # Wait until backend is confirmed healthy before Nginx starts
     depends_on:
       backend:
         condition: service_healthy
 
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1",
-             "--spider", "http://localhost:80/health"]
-      interval: 30s
+      test: ["CMD-SHELL", "wget -q --spider http://localhost/health || exit 1"]
+      interval: 15s
       timeout: 5s
       retries: 3
       start_period: 5s
@@ -79,8 +65,6 @@ services:
 
 
 # ── Shared Internal Network ─────────────────────────────────
-# Containers talk to each other by service name (e.g. http://backend:8000)
-# This network is NOT exposed to the internet
 networks:
   app-network:
     driver: bridge

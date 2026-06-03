@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import ReactFlow, { Controls, Background, MiniMap } from 'reactflow';
+import ReactFlow, { Controls, Background, MiniMap, ConnectionMode } from 'reactflow';
 import { useStore } from './store';
 import { shallow } from 'zustand/shallow';
 
@@ -120,6 +120,8 @@ export const PipelineUI = () => {
         snapGrid={[gridSize, gridSize]}
         connectionLineType='smoothstep'
         connectionLineStyle={{ stroke: 'var(--accent-indigo)', strokeWidth: 2 }}
+        connectionMode={ConnectionMode.Loose}
+        defaultEdgeOptions={{ type: 'smoothstep', animated: true }}
       >
         <Background color="rgba(255,255,255,0.06)" gap={gridSize} size={1} />
         <Controls />

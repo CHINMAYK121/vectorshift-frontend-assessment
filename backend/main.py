@@ -6,12 +6,14 @@ from typing import List, Dict, Any, Optional
 app = FastAPI()
 
 # Enable CORS for frontend integration
+# NOTE: allow_credentials must be False when allow_origins=["*"]
+# Using True + wildcard is rejected by browsers (CORS spec violation)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
 
 # Pydantic Schemas for validation
